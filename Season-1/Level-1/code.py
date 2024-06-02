@@ -21,8 +21,14 @@ def validorder(order: Order):
 
     for item in order.items:
         if item.type == 'payment':
+            if not isinstance(item.amount, (int, float)):
+                return "Invalid amount in item: %s" % item.description
             net += item.amount
         elif item.type == 'product':
+            if not isinstance(item.amount, (int, float)) or item.amount < 0:
+                return "Invalid amount in item: %s" % item.description
+            if not isinstance(item.quantity, int) or item.quantity < 0:
+                return "Invalid quantity in item: %s" % item.description
             net -= item.amount * item.quantity
         else:
             return "Invalid item type: %s" % item.type
